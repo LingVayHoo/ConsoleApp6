@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ConsoleApp6
 {
@@ -41,7 +38,7 @@ namespace ConsoleApp6
         {
             Worker[] allWorkers = GetAllWorkers();
             
-            if (allWorkers.Length > 0 && allWorkers.Length >= ID)
+            if (allWorkers != null && allWorkers.Length > 0 && allWorkers.Length >= ID)
             {
                 Worker targetWorker = new Worker();
                 for (int i = 0; i < allWorkers.Length; i++)
@@ -65,7 +62,7 @@ namespace ConsoleApp6
             Worker[] allWorkers = GetAllWorkers();
             int i = 1;
             bool isFounded = false;
-            if (allWorkers.Length > 0 && allWorkers.Length >= ID)
+            if (allWorkers != null && allWorkers.Length > 0 && allWorkers.Length >= ID)
             {
                 using (StreamWriter sw = new StreamWriter(_fileName, false, Encoding.Unicode))
                 {
@@ -176,46 +173,11 @@ namespace ConsoleApp6
         /// Метод для проверки существования файла
         /// </summary>
         /// <returns></returns>
-        private bool IsFileExists()
+        public bool IsFileExists()
         {
             FileInfo file = new FileInfo(@_fileName);
             return file.Exists;
         }
-
-        private void ReadFromFile()
-        {
-            if (IsFileExists())
-            {
-                using (StreamReader sr = new StreamReader(_fileName, Encoding.Unicode))
-                {
-                    string line;
-
-                    Console.WriteLine(
-                    $"{"ID |",4}" +
-                    $"{"Дата и время записи |",23}" +
-                    $"{"Фамилия Имя Отчество |",33}" +
-                    $"{"Возраст |",9}" +
-                    $"{"Рост |",5}" +
-                    $"{"Дата рождения |",16}" +
-                    $"{"Место рождения |",18}");
-                    while ((line = sr.ReadLine()) != null)
-                    {
-                        string[] data = line.Split('#');
-                        
-                    }
-                }
-            }
-            else { Console.WriteLine("Файл не найден!"); }
-        }
-
-        ///// <summary>
-        ///// Метод для увеличения размера массива
-        ///// </summary>
-        ///// <param name="need"></param>
-        //private void Resize(bool need)
-        //{
-        //    if (need) Array.Resize(ref this.workers, this.workers.Length * 2);
-        //}
 
         private Worker DefaultWorker()
         {

@@ -73,7 +73,7 @@ namespace ConsoleApp6
         {
             Worker[] workers = repository.GetAllWorkers();
             PrintLines(workers, repository);
-            SortMenu(repository);
+            SortMenu(workers, repository);
         } 
 
         /// <summary>
@@ -83,37 +83,43 @@ namespace ConsoleApp6
         /// <param name="repository"></param>
         static void PrintLines(Worker[] workers, Repository repository)
         {
-            string line;
-            PrintTitle();
-            for (int i = 0; i < workers.Length; i++)
+            if(workers != null)
             {
-                line = repository.WorkerToString(workers[i], workers[i].Id);
-                string[] data = line.Split('#');
-                PrintData(data);
-            }
+                string line;
+                PrintTitle();
+                for (int i = 0; i < workers.Length; i++)
+                {
+                    line = repository.WorkerToString(workers[i], workers[i].Id);
+                    string[] data = line.Split('#');
+                    PrintData(data);
+                }
+            }            
         }
 
         /// <summary>
         /// Меню сортировки
         /// </summary>
         /// <param name="repository"></param>
-        static void SortMenu(Repository repository)
+        static void SortMenu(Worker[] workers, Repository repository)
         {
-            Console.WriteLine();
-            Console.WriteLine("Отсортировать по:" +
-               "\n" +
-               "\n 1 - ID" +
-               "\n 2 - дате создания" +
-               "\n 3 - ФИО сотрудника" +
-               "\n 4 - возрасту" +
-               "\n 5 - росту" +
-               "\n 6 - дате рождения" +
-               "\n 7 - месту рождения" +
-               "\n");
-            Console.Write("Ваш выбор: ");
-            int key = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine();
-            Sort(key, repository);
+            if (workers != null)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Отсортировать по:" +
+                   "\n" +
+                   "\n 1 - ID" +
+                   "\n 2 - дате создания" +
+                   "\n 3 - ФИО сотрудника" +
+                   "\n 4 - возрасту" +
+                   "\n 5 - росту" +
+                   "\n 6 - дате рождения" +
+                   "\n 7 - месту рождения" +
+                   "\n");
+                Console.Write("Ваш выбор: ");
+                int key = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine();
+                Sort(key, repository);
+            }
             ReturnToMenu(repository);
         }
 
@@ -232,11 +238,18 @@ namespace ConsoleApp6
         /// <param name="repository"></param>
         static void ChooseCustomLines(Repository repository)
         {
-            DateTime startDate = IsValidValueDateTime("начальную дату:");
-            DateTime finishDate = IsValidValueDateTime("конечную дату (не включительно):");
-            Worker[] customWorkers = repository.GetWorkersBetweenTwoDates(startDate, finishDate);
+            if (repository.IsFileExists())
+            {
+                DateTime startDate = IsValidValueDateTime("начальную дату:");
+                DateTime finishDate = IsValidValueDateTime("конечную дату (не включительно):");
+                Worker[] customWorkers = repository.GetWorkersBetweenTwoDates(startDate, finishDate);
 
-            PrintLines(customWorkers, repository);
+                PrintLines(customWorkers, repository);
+            }
+            else
+            {
+                Console.WriteLine("Файл не найден!");
+            }
             ReturnToMenu(repository);
         }
 
